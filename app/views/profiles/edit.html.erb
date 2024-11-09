@@ -1,0 +1,9 @@
+<%= form_with model: @user, url: profile_path do |f| %>
+  <%= f.label :username %>
+  <%= f.text_field :username %>
+
+  <%= f.label :email_address %>
+  <%= f.text_field :email_address %>
+
+  <%= f.submit "Save  " %>
+<% end %>

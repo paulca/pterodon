@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
+  
   resource :session
+  resource :profile
+
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -8,6 +11,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   root to: "home#index"
+
+  resources :posts
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest

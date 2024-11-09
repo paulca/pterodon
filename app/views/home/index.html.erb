@@ -1,1 +1,23 @@
 Homepage
+
+<%= form_with model: Post.new do |f| %>
+  <%= f.label :content %>
+  <%= f.textarea :content, data: {controller: "cmd-enter"} %>
+
+  <%= f.submit "Post" %>
+<% end %>
+
+<%- if @posts.empty? -%>
+  <div>No posts</div>
+<% else %>
+  <dl>
+    <%- @posts.each do |post| -%>
+      <dt>@<%= post.user.username %></dt>
+      <dd>
+        <%= post.content %>
+
+        <small><%= post.created_at %></small>
+      </dd>
+    <% end %>
+  </dl>
+<% end %>
