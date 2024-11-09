@@ -2,7 +2,7 @@ Homepage
 
 <%= form_with model: Post.new do |f| %>
   <%= f.label :content %>
-  <%= f.textarea :content, data: {controller: "cmd-enter"} %>
+  <%= f.textarea :content, autofocus: true, data: {controller: "cmd-enter"} %>
 
   <%= f.submit "Post" %>
 <% end %>
