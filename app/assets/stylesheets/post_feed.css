@@ -1,0 +1,11 @@
+.post-feed {
+  & dt {
+    padding: 0.25rem 1rem 0.25rem 1rem;
+    font-weight: bold;
+  }
+
+  & dd {
+    padding: 0 1rem 1rem 1rem;
+    border-bottom: 1px solid var(--border-color)
+  }
+}

@@ -23,7 +23,7 @@
         <dd>
           <%= post.content %>
 
-          <small><%= post.created_at %></small>
+          <small><%= link_to post.created_at, post %></small>
         </dd>
       <% end %>
     </dl>

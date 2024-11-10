@@ -1,56 +1,40 @@
-@layer reset {
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-
-  * {
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
-    line-height: 1.5;
-  }
-
-  img, picture, video, canvas, svg {
-    display: block;
-    max-inline-size: 100%;
-  }
-
-  input, button, textarea, select {
-    font: inherit;
-    letter-spacing: inherit;
-    word-spacing: inherit;
-    color: currentColor;
-  }
-
-  p, h1, h2, h3, h4, h5, h6 {
-    overflow-wrap: break-word;
-  }
-
-  ol, ul {
-    list-style: none;
-  }
-
-  :not([class]) {
-    h1&, h2&, h3&, h4&, h5&, h6& {
-      margin-block: 0.75em;
-      line-height: 1.25;
-      text-wrap: balance;
-      letter-spacing: -0.05ch;
-    }
-
-    p&, ol&, ul& {
-      margin-block: 1em;
-    }
-
-    ol&, ul& {
-      padding-inline-start: 1.5em;
-      list-style: revert;
-    }
-
-    li& {
-      margin-block: 0.5em;
-    }
-  }
+/* 1. Use a more-intuitive box-sizing model */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+/* 2. Remove default margin */
+* {
+  margin: 0;
+}
+body {
+  /* 3. Add accessible line-height */
+  line-height: 1.5;
+  /* 4. Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+}
+/* 5. Improve media defaults */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+/* 6. Inherit fonts for form controls */
+input, button, textarea, select {
+  font: inherit;
+}
+/* 7. Avoid text overflows */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+/* 8. Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+/*
+  9. Create a root stacking context
+*/
+#root, #__next {
+  isolation: isolate;
 }
