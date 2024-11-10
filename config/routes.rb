@@ -20,16 +20,4 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-
-  # ActivityPub routes
-  scope '/:username' do
-    get '/', to: 'activitypub#actor', as: :actor
-    get '/outbox', to: 'activitypub#outbox', as: :outbox
-    post '/inbox', to: 'activitypub#inbox', as: :inbox
-    get '/followers', to: 'activitypub#followers', as: :followers
-    get '/following', to: 'activitypub#following', as: :following
-  end
-
-  # WebFinger route
-  get '/.well-known/webfinger', to: 'webfinger#show'
 end
