@@ -8,3 +8,8 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+html, body { 
+  font-family: system-ui, sans-serif;
+  font-weight: normal;
+}
