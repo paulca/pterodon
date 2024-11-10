@@ -26,6 +26,10 @@
     <div class="app">
       <nav>
         <%= link_to "Home", root_path %>
+
+        <%- if Current.user.present? -%>
+          <%= button_to "Sign out", session_path, method: :delete %>
+        <% end %>
       </nav>
 
       <main>
