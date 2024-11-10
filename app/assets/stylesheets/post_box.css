@@ -1,0 +1,25 @@
+.post-box {
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+
+  & form textarea {
+    border: none;
+    outline: none;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  & form input[type=submit] {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  & label {
+    display: none;
+  }
+
+  & button {
+    position: absolute;
+  }
+}

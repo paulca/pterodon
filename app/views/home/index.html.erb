@@ -1,23 +1,31 @@
-Homepage
+<header>
+  <h2>Homepage</h2>
+</header>
 
-<%= form_with model: Post.new do |f| %>
-  <%= f.label :content %>
-  <%= f.textarea :content, autofocus: true, data: {controller: "cmd-enter"} %>
+<section aria-labelledby="new-post" class="post-box">
+  <%= form_with model: Post.new do |f| %>
+    <%= f.label :content %>
+    <%= f.textarea :content,
+          placeholder: "What are you thinking?",
+          autofocus: true, data: {controller: "cmd-enter"} %>
 
-  <%= f.submit "Post" %>
-<% end %>
+    <%= f.submit "Post" %>
+  <% end %>
+</section>
 
-<%- if @posts.empty? -%>
-  <div>No posts</div>
-<% else %>
-  <dl>
-    <%- @posts.each do |post| -%>
-      <dt>@<%= post.user.username %></dt>
-      <dd>
-        <%= post.content %>
+<section aria-labelledby="feed" class="post-feed">
+  <%- if @posts.empty? -%>
+    <div>No posts</div>
+  <% else %>
+    <dl>
+      <%- @posts.each do |post| -%>
+        <dt>@<%= post.user.username %></dt>
+        <dd>
+          <%= post.content %>
 
-        <small><%= post.created_at %></small>
-      </dd>
-    <% end %>
-  </dl>
-<% end %>
+          <small><%= post.created_at %></small>
+        </dd>
+      <% end %>
+    </dl>
+  <% end %>
+</section>

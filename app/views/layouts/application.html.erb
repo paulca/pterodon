@@ -23,7 +23,14 @@
   </head>
 
   <body>
-    <%= link_to "Home", root_path %>
-    <%= yield %>
+    <div class="app">
+      <nav>
+        <%= link_to "Home", root_path %>
+      </nav>
+
+      <main>
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>

@@ -1,0 +1,19 @@
+.app {
+  display: flex;
+  height: 100vh;
+
+  & > nav {
+    width: 200px;
+    padding: 1rem;
+    border-right: 1px solid var(--border-color);
+  }
+
+  & > main {
+    overflow: auto;
+
+    & > header {
+      padding: 1rem;
+      border-bottom :1px solid var(--border-color);
+    }
+  }
+}
