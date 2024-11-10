@@ -1,4 +1,5 @@
 class ActivitypubController < ApplicationController
+  allow_unauthenticated_access
   skip_before_action :verify_authenticity_token, only: [:inbox]
   before_action :set_default_response_format
   

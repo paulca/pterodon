@@ -2,16 +2,18 @@
   <h2>Homepage</h2>
 </header>
 
-<section aria-labelledby="new-post" class="post-box">
-  <%= form_with model: Post.new do |f| %>
-    <%= f.label :content %>
-    <%= f.textarea :content,
-          placeholder: "What are you thinking?",
-          autofocus: true, data: {controller: "cmd-enter"} %>
+<% if authenticated? %>
+  <section aria-labelledby="new-post" class="post-box">
+    <%= form_with model: Post.new do |f| %>
+      <%= f.label :content %>
+      <%= f.textarea :content,
+            placeholder: "What are you thinking?",
+            autofocus: true, data: {controller: "cmd-enter"} %>
 
-    <%= f.submit "Post" %>
-  <% end %>
-</section>
+      <%= f.submit "Post" %>
+    <% end %>
+  </section>
+<% end %>
 
 <section aria-labelledby="feed" class="post-feed">
   <%- if @posts.empty? -%>

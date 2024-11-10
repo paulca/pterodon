@@ -1,4 +1,5 @@
 class WebfingerController < ApplicationController
+  allow_unauthenticated_access
   def show
     resource = params[:resource]
     username = resource.split('@').first.sub('acct:', '')
