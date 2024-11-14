@@ -1,0 +1,23 @@
+<section aria-labelledby="profile" class="profile">
+  <dl>
+    <dt>Username</dt>
+    <dd><%= @user.username %></dd>
+  </dl>
+</section>
+
+<section aria-labelledby="feed" class="post-feed">
+  <%- if @posts.empty? -%>
+    <div>No posts</div>
+  <% else %>
+    <dl>
+      <%- @posts.each do |post| -%>
+        <dt>@<%= post.user.username %></dt>
+        <dd>
+          <%= post.content %>
+
+          <small><%= link_to post.created_at, post %></small>
+        </dd>
+      <% end %>
+    </dl>
+  <% end %>
+</section>

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   resources :posts
+  resource :redirect
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
@@ -20,4 +21,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  get "@:username", to: "users#show"
 end
