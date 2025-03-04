@@ -1,0 +1,63 @@
+/* Standard button styles */
+button,
+input[type="submit"],
+.button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1.5;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover,
+input[type="submit"]:hover,
+.button:hover {
+  background-color: #2563eb;
+}
+
+button:active,
+input[type="submit"]:active,
+.button:active {
+  transform: translateY(1px);
+}
+
+/* Secondary button */
+button.secondary,
+input[type="submit"].secondary,
+.button.secondary {
+  background-color: #6b7280;
+}
+
+button.secondary:hover,
+input[type="submit"].secondary:hover,
+.button.secondary:hover {
+  background-color: #4b5563;
+}
+
+/* Danger button */
+button.danger,
+input[type="submit"].danger,
+.button.danger {
+  background-color: #ef4444;
+}
+
+button.danger:hover,
+input[type="submit"].danger:hover,
+.button.danger:hover {
+  background-color: #dc2626;
+}
+
+/* Disabled state */
+button:disabled,
+input[type="submit"]:disabled,
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
