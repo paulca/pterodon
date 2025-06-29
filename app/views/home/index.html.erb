@@ -8,7 +8,7 @@
       <%= f.label :content %>
       <%= f.textarea :content,
                      placeholder: "What are you thinking?",
-                     autofocus: true, data: { controller: "cmd-enter" } %>
+                     autofocus: true, data: { controller: "cmd-enter textarea-autogrow" } %>
 
       <%= f.submit "Post" %>
     <% end %>
@@ -21,11 +21,12 @@
   <% else %>
     <dl>
       <% @posts.each do |post| -%>
-        <dt>@<%= post.user.username %></dt>
+        <dt>
+          <span>@<%= post.user.username %></span>
+          <small><%= link_to post.created_at.to_formatted_s(:clean), post %></small>
+        </dt>
         <dd>
-          <%= auto_link post.content %>
-
-          <small><%= link_to post.created_at, post %></small>
+          <%= markdown post.content %>
         </dd>
       <% end %>
     </dl>

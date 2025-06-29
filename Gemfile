@@ -62,4 +62,5 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "rinku", "~> 2.0"
+
+gem "redcarpet", "~> 3.6"

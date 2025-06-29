@@ -1,0 +1,1 @@
+Time::DATE_FORMATS[:clean] = "%B %-e, %Y, %-I:%M%P"
