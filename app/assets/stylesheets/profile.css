@@ -1,3 +1,9 @@
 .profile {
   padding: 1rem;
 }
+
+@media (max-width: 767px) {
+  .profile {
+    padding: 0.75rem;
+  }
+}

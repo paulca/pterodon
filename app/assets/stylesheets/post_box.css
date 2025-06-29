@@ -1,12 +1,19 @@
 .post-box {
   border-bottom: 1px solid var(--border-color);
   position: relative;
+  padding: 0.5rem;
+
+  & form {
+    position: relative;
+  }
 
   & form textarea {
     border: none;
     outline: none;
     padding: 1rem;
     width: 100%;
+    min-height: 80px;
+    resize: vertical;
   }
 
   & form input[type=submit] {
@@ -23,5 +30,25 @@
     position: absolute;
     bottom: 1rem;
     right: 1rem;
+  }
+}
+
+/* Responsive adjustments for post box */
+@media (max-width: 767px) {
+  .post-box {
+    padding: 0.25rem;
+    
+    & form textarea {
+      padding: 0.75rem;
+      min-height: 60px;
+    }
+    
+    & form input[type=submit],
+    & button {
+      bottom: 0.5rem;
+      right: 0.5rem;
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+    }
   }
 }

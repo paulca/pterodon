@@ -7,8 +7,8 @@
     <%= form_with model: Post.new do |f| %>
       <%= f.label :content %>
       <%= f.textarea :content,
-            placeholder: "What are you thinking?",
-            autofocus: true, data: {controller: "cmd-enter"} %>
+                     placeholder: "What are you thinking?",
+                     autofocus: true, data: { controller: "cmd-enter" } %>
 
       <%= f.submit "Post" %>
     <% end %>
@@ -16,14 +16,14 @@
 <% end %>
 
 <section aria-labelledby="feed" class="post-feed">
-  <%- if @posts.empty? -%>
+  <% if @posts.empty? -%>
     <div>No posts</div>
   <% else %>
     <dl>
-      <%- @posts.each do |post| -%>
+      <% @posts.each do |post| -%>
         <dt>@<%= post.user.username %></dt>
         <dd>
-          <%= post.content %>
+          <%= auto_link post.content %>
 
           <small><%= link_to post.created_at, post %></small>
         </dd>

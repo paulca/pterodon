@@ -237,6 +237,7 @@ GEM
     reline (0.5.11)
       io-console (~> 0.5)
     rexml (3.3.9)
+    rinku (2.0.6)
     rubocop (1.68.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -346,6 +347,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 8.0.0)
+  rinku (~> 2.0)
   rubocop-rails-omakase
   selenium-webdriver
   solid_cable

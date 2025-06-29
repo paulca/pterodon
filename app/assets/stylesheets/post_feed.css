@@ -6,6 +6,27 @@
 
   & dd {
     padding: 0 1rem 1rem 1rem;
-    border-bottom: 1px solid var(--border-color)
+    border-bottom: 1px solid var(--border-color);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    & small {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 767px) {
+  .post-feed {
+    & dt {
+      padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+    }
+
+    & dd {
+      padding: 0 0.75rem 0.75rem 0.75rem;
+    }
   }
 }
