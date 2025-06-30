@@ -33,8 +33,10 @@
       </nav>
 
       <main>
-        <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
-        <%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
+        <%- if flash[:alert] || flash[:notice] -%>
+          <%= tag.div(flash[:alert], class: "flash", style: "color:red", data: { controller: "flash" }) if flash[:alert] %>
+          <%= tag.div(flash[:notice], class: "flash", style: "color:green", data: { controller: "flash" }) if flash[:notice] %>
+        <% end %>
         <%= yield %>
       </main>
 
