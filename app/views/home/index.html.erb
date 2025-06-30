@@ -8,7 +8,7 @@
       <%= f.label :content %>
       <%= f.textarea :content,
                      placeholder: "What are you thinking?",
-                     autofocus: true, data: { controller: "cmd-enter textarea-autogrow" } %>
+                     autofocus: true, data: { controller: "cmd-enter textarea-autogrow persist-input", persist_input_key_value: "new_post_content" } %>
 
       <%= f.submit "Post" %>
     <% end %>
