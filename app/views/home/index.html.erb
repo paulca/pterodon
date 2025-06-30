@@ -4,11 +4,11 @@
 
 <% if authenticated? %>
   <section aria-labelledby="new-post" class="post-box">
-    <%= form_with model: Post.new do |f| %>
+    <%= form_with model: Post.new, data: { controller: "persist-input"} do |f| %>
       <%= f.label :content %>
       <%= f.textarea :content,
                      placeholder: "What are you thinking?",
-                     autofocus: true, data: { controller: "cmd-enter textarea-autogrow persist-input", persist_input_key_value: "new_post_content" } %>
+                     autofocus: true, data: { controller: "cmd-enter textarea-autogrow", persist_input_target: "textarea" } %>
 
       <%= f.submit "Post" %>
     <% end %>
