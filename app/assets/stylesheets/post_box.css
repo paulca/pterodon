@@ -1,9 +1,11 @@
 .post-box {
   border-bottom: 1px solid var(--border-color);
   position: relative;
+  width: 100%;
 
   & form {
     position: relative;
+    width: 100%;
   }
 
   & form textarea {
@@ -14,7 +16,7 @@
     min-height: 80px;
     resize: none;
     margin-bottom: 0;
-    padding-right: 100px;
+    padding-right: 80px;
   }
 
   & form input[type="submit"] {
@@ -42,6 +44,7 @@
     & form textarea {
       padding: 0.75rem;
       min-height: 60px;
+      padding-right: 80px;
     }
 
     & form input[type="submit"],
