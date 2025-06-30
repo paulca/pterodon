@@ -28,11 +28,13 @@
         <%= link_to "Home", root_path %>
 
         <%- if Current.user.present? -%>
-          <%= button_to "Sign out", session_path, method: :delete %>
+          <%= button_to "Sign out", session_path, method: :delete, class: "link" %>
         <% end %>
       </nav>
 
       <main>
+        <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+        <%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
         <%= yield %>
       </main>
 

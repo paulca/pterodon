@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   
   resource :session
+  get "/signin", to: "sessions#new"
+
   resource :profile
 
   resources :passwords, param: :token
