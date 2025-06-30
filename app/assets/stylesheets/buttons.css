@@ -61,3 +61,13 @@ input[type="submit"]:disabled,
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+button.link {
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+button.link:hover {
+  background: var(--hover-color);
+}
