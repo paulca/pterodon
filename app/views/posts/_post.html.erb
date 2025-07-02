@@ -1,12 +1,9 @@
-<div id="<%= dom_id post %>">
-  <p>
-    <strong>User:</strong>
-    <%= post.user.username %>
-  </p>
-
-  <p>
-    <strong>Content:</strong>
-    <%= post.content %>
-  </p>
-
-</div>
+<article class="post">
+  <header>
+    <span>@<%= post.user.username %></span>
+    <small><%= link_to post.created_at.to_formatted_s(:clean), post %></small>
+  </header>
+  <main>
+    <%= markdown post.content %>
+  </main>
+</article>

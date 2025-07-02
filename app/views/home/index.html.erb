@@ -20,15 +20,7 @@
     <div>No posts</div>
   <% else %>
     <dl>
-      <% @posts.each do |post| -%>
-        <dt>
-          <span>@<%= post.user.username %></span>
-          <small><%= link_to post.created_at.to_formatted_s(:clean), post %></small>
-        </dt>
-        <dd>
-          <%= markdown post.content %>
-        </dd>
-      <% end %>
+      <%= render @posts %>
     </dl>
   <% end %>
 </section>
