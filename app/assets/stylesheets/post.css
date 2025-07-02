@@ -1,8 +1,47 @@
 .post {
-  padding: 1rem;
+  & header {
+    padding: 0.25rem 1rem 0.25rem 1rem;
+    font-weight: bold;
 
-  header {
-    display: flex;
+    display: inline-flex;
     justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    & small {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: normal;
+
+      & a {
+        text-decoration: none;
+        color: var(--gray);
+      }
+    }
+  }
+
+  & main {
+    padding: 0 1rem 1rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    & p,
+    & ul {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 767px) {
+  .post {
+    & dt {
+      padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+    }
+
+    & dd {
+      padding: 0 0.75rem 0.75rem 0.75rem;
+    }
   }
 }

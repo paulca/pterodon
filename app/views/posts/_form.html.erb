@@ -12,13 +12,8 @@
   <% end %>
 
   <div>
-    <%= form.label :user_id, style: "display: block" %>
-    <%= form.text_field :user_id %>
-  </div>
-
-  <div>
     <%= form.label :content, style: "display: block" %>
-    <%= form.textarea :content, data: { persist_input_target: "textarea" } %>
+    <%= form.textarea :content, data: { persist_input_target: "textarea", controller: "textarea-autogrow" } %>
   </div>
 
   <div>
