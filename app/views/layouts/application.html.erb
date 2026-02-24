@@ -25,7 +25,12 @@
   <body>
     <div class="app">
       <nav>
-        <%= link_to "Home", root_path %>
+        <div>
+          <%= link_to "Home", root_path %>
+          <%- if Current.user.present? -%>
+            <p><strong><%= Current.user.remote_followers.count %></strong> <%= Current.user.remote_followers.count == 1 ? "follower" : "followers" %></p>
+          <% end %>
+        </div>
 
         <%- if Current.user.present? -%>
           <%= button_to "Sign out", session_path, method: :delete, class: "link" %>
