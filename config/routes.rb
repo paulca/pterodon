@@ -24,5 +24,21 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  get "@:username", to: "users#show"
+  get "@:username", to: "users#show", as: :user
+
+  namespace :activity_pub do
+    post '/shared_inbox', to: 'shared_inbox#create'
+
+    scope '/:username' do
+      resource :actor, only: [:show]
+      resource :inbox, only: [:create]
+      resource :outbox, only: [:show]
+      resources :followers, only: [:index]
+      resources :following, only: [:index]
+      resources :posts, only: [:show]
+    end
+  end
+
+  # WebFinger route
+  get '/.well-known/webfinger', to: 'activity_pub/webfinger#show'
 end
