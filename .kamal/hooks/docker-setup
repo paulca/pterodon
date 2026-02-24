@@ -1,0 +1,5 @@
+#!/bin/sh
+# Remove once https://github.com/basecamp/kamal/issues/980 is resolved
+echo "Making docker command available to user '${USER}'..."
+kamal server exec 'sudo usermod -a -G docker ${USER}' -d ${KAMAL_DESTINATION} -h ${KAMAL_HOSTS} 2>/dev/null
+echo "Docker set up on $KAMAL_HOSTS..."
