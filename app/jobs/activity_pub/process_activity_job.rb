@@ -95,12 +95,17 @@ module ActivityPub
       post = find_local_post(in_reply_to)
       return unless post
 
+      return unless note['id'].is_a?(String) && note['id'].present?
+
+      sanitized_content = ActionController::Base.helpers.sanitize(note['content'])
+      return if sanitized_content.blank?
+
       actor_name = fetch_actor_name(@activity.actor)
 
       post.remote_replies.find_or_create_by!(activity_uri: note['id']) do |reply|
         reply.actor_uri = @activity.actor
         reply.actor_name = actor_name
-        reply.content = ActionController::Base.helpers.sanitize(note['content'])
+        reply.content = sanitized_content
         reply.published_at = parse_published_time(note['published'])
       end
 
