@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  allow_unauthenticated_access only: [:index, :show]
+  allow_unauthenticated_access only: [ :index, :show ]
   before_action :set_post, only: %i[ show edit update destroy ]
   before_action :authorize_post_owner!, only: %i[ edit update destroy ]
 

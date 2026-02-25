@@ -7,7 +7,7 @@ module ActivityPub
     private
 
     def set_content_type_header
-      response.headers['Content-Type'] = 'application/activity+json'
+      response.headers["Content-Type"] = "application/activity+json"
     end
   end
 end

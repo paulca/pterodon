@@ -7,11 +7,11 @@ module ActivityPub
       @user = User.find(user_id)
 
       case @activity.type
-      when 'Follow'
+      when "Follow"
         handle_follow
-      when 'Undo'
+      when "Undo"
         handle_undo
-      when 'Create'
+      when "Create"
         handle_create
       else
         Rails.logger.info "ProcessActivityJob: Ignoring unhandled activity type '#{@activity.type}' from #{@activity.actor}"
@@ -37,9 +37,9 @@ module ActivityPub
 
       # Send Accept(Follow) back to the follower's inbox
       accept_activity = {
-        '@context': 'https://www.w3.org/ns/activitystreams',
+        '@context': "https://www.w3.org/ns/activitystreams",
         'id': "#{Rails.application.routes.url_helpers.activity_pub_actor_url(@user.username)}#accept-#{SecureRandom.hex(8)}",
-        'type': 'Accept',
+        'type': "Accept",
         'actor': Rails.application.routes.url_helpers.activity_pub_actor_url(@user.username),
         'object': @activity.to_h
       }
@@ -67,8 +67,8 @@ module ActivityPub
     end
 
     def handle_undo_by_type(inner_object, actor_uri)
-      case inner_object['type']
-      when 'Follow'
+      case inner_object["type"]
+      when "Follow"
         remove_follower(actor_uri)
       else
         Rails.logger.info "ProcessActivityJob: Ignoring Undo for type '#{inner_object['type']}' from #{actor_uri}"
@@ -87,26 +87,26 @@ module ActivityPub
 
     def handle_create
       note = @activity.object
-      return unless note.is_a?(Hash) && note['type'] == 'Note'
+      return unless note.is_a?(Hash) && note["type"] == "Note"
 
-      in_reply_to = note['inReplyTo']
+      in_reply_to = note["inReplyTo"]
       return unless in_reply_to.is_a?(String)
 
       post = find_local_post(in_reply_to)
       return unless post
 
-      return unless note['id'].is_a?(String) && note['id'].present?
+      return unless note["id"].is_a?(String) && note["id"].present?
 
-      sanitized_content = ActionController::Base.helpers.sanitize(note['content'])
+      sanitized_content = ActionController::Base.helpers.sanitize(note["content"])
       return if sanitized_content.blank?
 
       actor_name = fetch_actor_name(@activity.actor)
 
-      post.remote_replies.find_or_create_by!(activity_uri: note['id']) do |reply|
+      post.remote_replies.find_or_create_by!(activity_uri: note["id"]) do |reply|
         reply.actor_uri = @activity.actor
         reply.actor_name = actor_name
         reply.content = sanitized_content
-        reply.published_at = parse_published_time(note['published'])
+        reply.published_at = parse_published_time(note["published"])
       end
 
       Rails.logger.info "Stored remote reply #{note['id']} on post #{post.id} from #{@activity.actor}"
@@ -127,7 +127,7 @@ module ActivityPub
 
     def fetch_actor_name(actor_uri)
       actor = RemoteActorFetcher.call(actor_uri)
-      actor['name'] || actor['preferredUsername'] || actor_uri
+      actor["name"] || actor["preferredUsername"] || actor_uri
     rescue RemoteActorFetcher::FetchError => e
       Rails.logger.warn "ProcessActivityJob: Could not fetch actor name: #{e.message}"
       actor_uri

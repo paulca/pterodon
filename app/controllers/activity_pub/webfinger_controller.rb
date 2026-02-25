@@ -24,12 +24,12 @@ module ActivityPub
         ],
         links: [
           {
-            rel: 'self',
-            type: 'application/activity+json',
+            rel: "self",
+            type: "application/activity+json",
             href: activity_pub_actor_url(@user.username)
           }
         ]
-      }, content_type: 'application/jrd+json'
+      }, content_type: "application/jrd+json"
     end
   end
 end

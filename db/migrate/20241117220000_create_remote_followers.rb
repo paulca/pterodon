@@ -8,6 +8,6 @@ class CreateRemoteFollowers < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :remote_followers, [:user_id, :actor_uri], unique: true
+    add_index :remote_followers, [ :user_id, :actor_uri ], unique: true
   end
 end
