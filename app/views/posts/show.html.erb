@@ -1,29 +1,24 @@
 <article class="post">
-  <dl>
-    <dt>
-      <b>@<%= @post.user.username %></b>
-      <small><%= @post.created_at.to_formatted_s(:clean) %></small>
-    </dt>
-    <dd>
-      <%= markdown @post.content %>
-    </dd>
-  </dl>
-
+  <header>
+    <span>@<%= @post.user.username %></span>
+    <small><%= @post.created_at.to_formatted_s(:clean) %></small>
+  </header>
+  <main>
+    <%= markdown @post.content %>
+  </main>
 
   <% if authenticated? && @post.user == Current.user %>
-    <div>
-      <%= link_to "Edit this post", edit_post_path(@post) %> |
-      <%= link_to "Back to posts", posts_path %>
-
-      <%= button_to "Destroy this post", @post, method: :delete, data: {turbo_confirm: "Are you sure?"} %>
-    </div>
+    <footer class="post-actions">
+      <%= link_to "Edit", edit_post_path(@post) %>
+      <%= button_to "Delete", @post, method: :delete, class: "link danger-text", data: {turbo_confirm: "Are you sure?"} %>
+    </footer>
   <% end %>
 </article>
 
 <% replies = @post.remote_replies.order(published_at: :asc) %>
 <% if replies.any? %>
   <section class="replies">
-    <h3>Replies (<%= replies.size %>)</h3>
+    <h3><%= pluralize(replies.size, "reply") %></h3>
     <% replies.each do |reply| %>
       <article class="reply">
         <header>
@@ -31,7 +26,7 @@
           <small><%= reply.published_at&.to_formatted_s(:clean) %></small>
         </header>
         <main>
-          <%= sanitize reply.content %>
+          <%= sanitize reply.content, tags: RemoteReply::ALLOWED_TAGS, attributes: RemoteReply::ALLOWED_ATTRIBUTES %>
         </main>
       </article>
     <% end %>
