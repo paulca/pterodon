@@ -3,7 +3,7 @@ class EncryptUserPrivateKeys < ActiveRecord::Migration[8.0]
     # Read plaintext values, then write them back through ActiveRecord encryption.
     # After this migration, User.encrypts :private_key must be declared on the model.
     User.find_each do |user|
-      plaintext = user.private_key
+      plaintext = user.read_attribute_before_type_cast(:private_key)
       next if plaintext.blank?
 
       # Skip if already encrypted (starts with ciphertext marker)
