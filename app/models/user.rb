@@ -4,6 +4,8 @@ class User < ApplicationRecord
   has_many :posts
   has_many :remote_followers, dependent: :destroy
 
+  encrypts :private_key
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   before_create :generate_activitypub_keys
