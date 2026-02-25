@@ -1,82 +1,144 @@
 .post {
   & header {
-    padding: 0.25rem 1rem 0.25rem 1rem;
+    padding: 0.75rem 1rem 0;
     font-weight: bold;
 
-    display: inline-flex;
+    display: flex;
     justify-content: space-between;
-    align-items: center;
-    width: 100%;
+    align-items: baseline;
 
     & small {
-      display: block;
       font-size: 0.75rem;
       font-weight: normal;
 
       & a {
         text-decoration: none;
         color: var(--gray);
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }
 
   & main {
-    padding: 0 1rem 1rem 1rem;
-    border-bottom: 1px solid var(--border-color);
+    padding: 0.25rem 1rem 0.75rem 1rem;
     word-wrap: break-word;
     overflow-wrap: break-word;
 
     & p,
     & ul {
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }
 
+.post + .post {
+  border-top: 1px solid var(--border-color);
+}
+
+.post-actions {
+  padding: 0 1rem 0.75rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.85rem;
+
+  & a {
+    color: var(--gray);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.danger-text {
+  color: #dc2626;
+  font-size: 0.85rem;
+  padding: 0;
+}
+
+.danger-text:hover {
+  background: none;
+  text-decoration: underline;
+}
+
 .replies {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--border-color);
 
   & h3 {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    padding: 0.75rem 1rem 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
     color: var(--gray);
-    border-bottom: 1px solid var(--border-color);
   }
 }
 
 .reply {
   & header {
-    padding: 0.25rem 1rem;
-    font-size: 0.9rem;
+    padding: 0.5rem 1rem 0;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
 
     & small {
       font-size: 0.75rem;
       color: var(--gray);
-      margin-left: 0.5rem;
     }
   }
 
   & main {
-    padding: 0 1rem 0.75rem 1rem;
-    border-bottom: 1px solid var(--border-color);
+    padding: 0.25rem 1rem 0.5rem;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    font-size: 0.95rem;
 
     & p {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
+}
+
+.reply + .reply {
+  border-top: 1px solid var(--border-color);
 }
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 767px) {
   .post {
-    & dt {
-      padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+    & header {
+      padding: 0.5rem 0.75rem 0;
     }
 
-    & dd {
-      padding: 0 0.75rem 0.75rem 0.75rem;
+    & main {
+      padding: 0.25rem 0.75rem 0.5rem;
+    }
+  }
+
+  .post-actions {
+    padding: 0 0.75rem 0.5rem;
+  }
+
+  .reply {
+    & header {
+      padding: 0.5rem 0.75rem 0;
+    }
+
+    & main {
+      padding: 0.25rem 0.75rem 0.5rem;
     }
   }
 }

@@ -38,6 +38,12 @@
   font-size: 16px;
 }
 
+.empty-state {
+  padding: 2rem 1rem;
+  color: var(--gray);
+  text-align: center;
+}
+
 /* Medium screens and larger */
 @media (min-width: 768px) {
   .app {
@@ -59,9 +65,8 @@
     }
 
     & > aside {
-      border-right: 1px solid var(--border-color);
       flex: 1;
-      max-width: 400px;
+      border-left: 1px solid var(--border-color);
     }
   }
 }
