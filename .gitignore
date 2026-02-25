@@ -34,3 +34,5 @@
 /config/master.key
 config/deploy.yml
 .kamal/secrets
+
+/config/credentials/production.key

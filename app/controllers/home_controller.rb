@@ -7,6 +7,6 @@ class HomeController < ApplicationController
       user = User.find_by(username: username)
       redirect_to "#{request.protocol}null@#{request.host}#{request.port ? ":#{request.port}" : ""}/@#{user.username}" if user.present?
     end
-    @posts = Post.order("created_at desc")
+    @posts = Post.includes(:remote_replies).order("created_at desc")
   end
 end

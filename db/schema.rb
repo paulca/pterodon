@@ -10,13 +10,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_09_160924) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_25_131728) do
+  create_table "followings", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "following_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["following_id"], name: "index_followings_on_following_id"
+    t.index ["user_id"], name: "index_followings_on_user_id"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.integer "user_id", null: false
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "parent_id"
+    t.index ["parent_id"], name: "index_posts_on_parent_id"
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "remote_followers", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "actor_uri", null: false
+    t.string "inbox_url", null: false
+    t.string "shared_inbox_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "actor_uri"], name: "index_remote_followers_on_user_id_and_actor_uri", unique: true
+    t.index ["user_id"], name: "index_remote_followers_on_user_id"
+  end
+
+  create_table "remote_replies", force: :cascade do |t|
+    t.integer "post_id", null: false
+    t.string "activity_uri", null: false
+    t.string "actor_uri", null: false
+    t.string "actor_name"
+    t.text "content", null: false
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_uri"], name: "index_remote_replies_on_activity_uri", unique: true
+    t.index ["post_id"], name: "index_remote_replies_on_post_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -33,11 +68,18 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_09_160924) do
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "location"
     t.string "username"
+    t.text "private_key"
+    t.text "public_key"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["username"], name: "index_users_on_username"
   end
 
+  add_foreign_key "followings", "followings"
+  add_foreign_key "followings", "users"
   add_foreign_key "posts", "users"
+  add_foreign_key "remote_followers", "users"
+  add_foreign_key "remote_replies", "posts"
   add_foreign_key "sessions", "users"
 end

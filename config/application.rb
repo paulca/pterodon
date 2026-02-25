@@ -23,5 +23,8 @@ module Pterodon
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Allow ngrok hosts in development for ActivityPub testing
+    config.hosts << /.*\.ngrok\.app/ if Rails.env.development?
   end
 end
