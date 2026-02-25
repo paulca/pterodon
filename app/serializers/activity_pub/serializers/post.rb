@@ -7,12 +7,12 @@ module ActivityPub
 
       def to_create_activity
         {
-          '@context': 'https://www.w3.org/ns/activitystreams',
+          '@context': "https://www.w3.org/ns/activitystreams",
           'id': "#{post_url}/activity",
-          'type': 'Create',
+          'type': "Create",
           'actor': actor_url,
           'published': @post.created_at.iso8601,
-          'to': [ 'https://www.w3.org/ns/activitystreams#Public' ],
+          'to': [ "https://www.w3.org/ns/activitystreams#Public" ],
           'cc': [ followers_url ],
           'object': to_note
         }
@@ -21,11 +21,11 @@ module ActivityPub
       def to_note
         {
           'id': post_url,
-          'type': 'Note',
+          'type': "Note",
           'published': @post.created_at.iso8601,
           'url': post_url,
           'attributedTo': actor_url,
-          'to': [ 'https://www.w3.org/ns/activitystreams#Public' ],
+          'to': [ "https://www.w3.org/ns/activitystreams#Public" ],
           'cc': [ followers_url ],
           'content': content_html,
           'contentMap': { 'en': content_html },
@@ -36,14 +36,14 @@ module ActivityPub
 
       def to_delete_activity
         {
-          '@context': 'https://www.w3.org/ns/activitystreams',
+          '@context': "https://www.w3.org/ns/activitystreams",
           'id': "#{post_url}#delete",
-          'type': 'Delete',
+          'type': "Delete",
           'actor': actor_url,
-          'to': [ 'https://www.w3.org/ns/activitystreams#Public' ],
+          'to': [ "https://www.w3.org/ns/activitystreams#Public" ],
           'object': {
             'id': post_url,
-            'type': 'Tombstone'
+            'type': "Tombstone"
           }
         }
       end

@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  
   resource :session
   get "/signin", to: "sessions#new"
 
@@ -27,18 +26,18 @@ Rails.application.routes.draw do
   get "@:username", to: "users#show", as: :user
 
   namespace :activity_pub do
-    post '/shared_inbox', to: 'shared_inbox#create'
+    post "/shared_inbox", to: "shared_inbox#create"
 
-    scope '/:username' do
-      resource :actor, only: [:show]
-      resource :inbox, only: [:create]
-      resource :outbox, only: [:show]
-      resources :followers, only: [:index]
-      resources :following, only: [:index]
-      resources :posts, only: [:show]
+    scope "/:username" do
+      resource :actor, only: [ :show ]
+      resource :inbox, only: [ :create ]
+      resource :outbox, only: [ :show ]
+      resources :followers, only: [ :index ]
+      resources :following, only: [ :index ]
+      resources :posts, only: [ :show ]
     end
   end
 
   # WebFinger route
-  get '/.well-known/webfinger', to: 'activity_pub/webfinger#show'
+  get "/.well-known/webfinger", to: "activity_pub/webfinger#show"
 end

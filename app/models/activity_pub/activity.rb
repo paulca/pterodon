@@ -7,15 +7,15 @@ module ActivityPub
     end
 
     def type
-      payload['type']
+      payload["type"]
     end
 
     def actor
-      payload['actor']
+      payload["actor"]
     end
 
     def object
-      payload['object']
+      payload["object"]
     end
 
     def to_h

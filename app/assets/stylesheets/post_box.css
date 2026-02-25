@@ -1,5 +1,6 @@
 .post-box {
-  border-bottom: 1px solid var(--border-color);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   position: relative;
   width: 100%;
 
@@ -17,6 +18,8 @@
     resize: none;
     margin-bottom: 0;
     padding-right: 80px;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
   }
 
   & form input[type="submit"] {

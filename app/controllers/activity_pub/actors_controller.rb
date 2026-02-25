@@ -5,11 +5,11 @@ module ActivityPub
 
       render json: {
         '@context': [
-          'https://www.w3.org/ns/activitystreams',
-          'https://w3id.org/security/v1'
+          "https://www.w3.org/ns/activitystreams",
+          "https://w3id.org/security/v1"
         ],
         'id': activity_pub_actor_url(@user.username),
-        'type': 'Person',
+        'type': "Person",
         'preferredUsername': @user.username,
         'name': @user.username,
         'inbox': activity_pub_inbox_url(@user.username),

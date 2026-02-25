@@ -13,7 +13,7 @@ module ActivityPub
       params = parse_signature_header(signature_header)
       key_id = params["keyId"]
       algorithm = params["algorithm"] || "rsa-sha256"
-      headers = params["headers"]&.split(" ") || ["date"]
+      headers = params["headers"]&.split(" ") || [ "date" ]
       signature = Base64.decode64(params["signature"])
 
       # POST requests must include digest in signed headers to prevent body tampering

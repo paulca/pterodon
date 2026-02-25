@@ -36,10 +36,14 @@
       }
     }
   }
+
+  &:hover {
+    background-color: var(--hover-color);
+  }
 }
 
 .post + .post {
-  border-top: 1px solid var(--border-color);
+  margin-bottom: 2rem;
 }
 
 .post-actions {
