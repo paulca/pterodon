@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   allow_unauthenticated_access only: [:index, :show]
   before_action :set_post, only: %i[ show edit update destroy ]
+  before_action :authorize_post_owner!, only: %i[ edit update destroy ]
 
   # GET /posts or /posts.json
   def index
@@ -63,6 +64,10 @@ class PostsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_post
       @post = Post.includes(:remote_replies).find(params.expect(:id))
+    end
+
+    def authorize_post_owner!
+      redirect_to @post, status: :forbidden unless @post.user == Current.user
     end
 
     # Only allow a list of trusted parameters through.
