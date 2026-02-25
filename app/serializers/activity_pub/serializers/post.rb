@@ -27,8 +27,8 @@ module ActivityPub
           'attributedTo': actor_url,
           'to': [ 'https://www.w3.org/ns/activitystreams#Public' ],
           'cc': [ followers_url ],
-          'content': @post.content,
-          'contentMap': { 'en': @post.content },
+          'content': content_html,
+          'contentMap': { 'en': content_html },
           'attachment': [],
           'tag': []
         }
@@ -64,6 +64,10 @@ module ActivityPub
 
       def followers_url
         routes.activity_pub_followers_url(@post.user.username)
+      end
+
+      def content_html
+        "<p>#{ERB::Util.html_escape(@post.content)}</p>"
       end
     end
   end

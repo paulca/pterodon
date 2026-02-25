@@ -39,8 +39,8 @@ module ActivityPub
           'to': [ 'https://www.w3.org/ns/activitystreams#Public' ],
           'cc': [ activity_pub_followers_url(post.user.username) ],
           'sensitive': false,
-          'content': post.content,
-          'contentMap': { 'en': post.content },
+          'content': "<p>#{ERB::Util.html_escape(post.content)}</p>",
+          'contentMap': { 'en': "<p>#{ERB::Util.html_escape(post.content)}</p>" },
           'attachment': [],
           'tag': []
         }
