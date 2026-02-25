@@ -18,11 +18,20 @@ module ActivityPub
 
       # Fetch the remote actor to get their public key
       actor_uri = key_id.sub(/#.*/, "")
-      actor = RemoteActorFetcher.call(actor_uri)
+      begin
+        actor = RemoteActorFetcher.call(actor_uri)
+      rescue RemoteActorFetcher::FetchError => e
+        raise VerificationError, "Could not fetch signing key from #{actor_uri}: #{e.message}"
+      end
+
       public_key_pem = actor.dig("publicKey", "publicKeyPem")
       raise VerificationError, "No public key found for #{actor_uri}" if public_key_pem.blank?
 
-      public_key = OpenSSL::PKey::RSA.new(public_key_pem)
+      begin
+        public_key = OpenSSL::PKey::RSA.new(public_key_pem)
+      rescue OpenSSL::PKey::RSAError, OpenSSL::PKey::PKeyError => e
+        raise VerificationError, "Invalid public key from #{actor_uri}: #{e.message}"
+      end
 
       # Reconstruct the signing string
       signing_string = headers.map do |header|
