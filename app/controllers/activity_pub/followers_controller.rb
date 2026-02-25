@@ -7,8 +7,7 @@ module ActivityPub
         '@context': 'https://www.w3.org/ns/activitystreams',
         'id': activity_pub_followers_url(@user.username),
         'type': 'OrderedCollection',
-        'totalItems': @user.remote_followers.count,
-        'orderedItems': @user.remote_followers.pluck(:actor_uri)
+        'totalItems': @user.remote_followers.count
       }
     end
   end
