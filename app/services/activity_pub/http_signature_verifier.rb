@@ -47,9 +47,22 @@ module ActivityPub
         raise VerificationError, "Signature verification failed"
       end
 
-      # Optionally verify digest if present
-      if headers.include?("digest") && @request.headers["Digest"].present?
+      # Always verify body digest on POST requests
+      if @request.post?
+        raise VerificationError, "Missing Digest header on POST request" if @request.headers["Digest"].blank?
         verify_digest!
+      end
+
+      # Validate Date header to prevent replay attacks (allow 5 minute window)
+      if @request.headers["Date"].present?
+        begin
+          request_time = Time.httpdate(@request.headers["Date"])
+          if (Time.now.utc - request_time).abs > 300
+            raise VerificationError, "Request Date is too old or too far in the future"
+          end
+        rescue ArgumentError
+          raise VerificationError, "Invalid Date header format"
+        end
       end
 
       true
