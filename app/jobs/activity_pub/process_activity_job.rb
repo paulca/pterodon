@@ -11,6 +11,8 @@ module ActivityPub
         handle_follow
       when 'Undo'
         handle_undo
+      else
+        Rails.logger.info "ProcessActivityJob: Ignoring unhandled activity type '#{@activity.type}' from #{@activity.actor}"
       end
     end
 
@@ -47,25 +49,37 @@ module ActivityPub
 
     def handle_undo
       inner = @activity.object
+      actor_uri = @activity.actor
 
       case inner
       when Hash
-        handle_undo_by_type(inner)
+        handle_undo_by_type(inner, actor_uri)
       when String
-        # Some implementations send the object URI as a string
-        Rails.logger.info "Received Undo with string object: #{inner}"
+        # Some implementations send the object URI as a string instead of the full object.
+        # Since we can't inspect the type, resolve by actor — if they're undoing anything,
+        # the only thing we track is follows.
+        remove_follower(actor_uri)
+      else
+        Rails.logger.warn "ProcessActivityJob: Unexpected Undo object type #{inner.class} from #{actor_uri}"
       end
     end
 
-    def handle_undo_by_type(inner_object)
+    def handle_undo_by_type(inner_object, actor_uri)
       case inner_object['type']
       when 'Follow'
-        actor_uri = @activity.actor
-        follower = @user.remote_followers.find_by(actor_uri: actor_uri)
-        if follower
-          follower.destroy!
-          Rails.logger.info "Removed follower #{actor_uri}"
-        end
+        remove_follower(actor_uri)
+      else
+        Rails.logger.info "ProcessActivityJob: Ignoring Undo for type '#{inner_object['type']}' from #{actor_uri}"
+      end
+    end
+
+    def remove_follower(actor_uri)
+      follower = @user.remote_followers.find_by(actor_uri: actor_uri)
+      if follower
+        follower.destroy!
+        Rails.logger.info "Removed follower #{actor_uri}"
+      else
+        Rails.logger.warn "ProcessActivityJob: Undo from #{actor_uri} but no follower record found"
       end
     end
   end
