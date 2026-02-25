@@ -120,7 +120,7 @@ module ActivityPub
       match = uri.path.match(%r{/activity_pub/([^/]+)/posts/(\d+)})
       return unless match
 
-      Post.find_by(id: match[2])
+      @user.posts.find_by(id: match[2])
     rescue URI::InvalidURIError
       nil
     end
