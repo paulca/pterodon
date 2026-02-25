@@ -47,8 +47,14 @@ module ActivityPub
       end
 
       if failures.any?
-        Rails.logger.error "ActivityPub delivery failed for #{failures.size}/#{inbox_urls.size} inboxes"
+        Rails.logger.error "ActivityPub delivery failed for #{failures.size}/#{inbox_urls.size} inboxes: #{failures.join(', ')}"
       end
+
+      if failures.size == inbox_urls.size && inbox_urls.any?
+        raise DeliveryError, "All #{failures.size} deliveries failed"
+      end
+
+      failures
     end
   end
 end
