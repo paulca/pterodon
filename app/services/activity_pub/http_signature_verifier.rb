@@ -68,15 +68,15 @@ module ActivityPub
       end
 
       # Validate Date header to prevent replay attacks (allow 5 minute window)
-      if @request.headers["Date"].present?
-        begin
-          request_time = Time.httpdate(@request.headers["Date"])
-          if (Time.now.utc - request_time).abs > 300
-            raise VerificationError, "Request Date is too old or too far in the future"
-          end
-        rescue ArgumentError
-          raise VerificationError, "Invalid Date header format"
+      raise VerificationError, "Missing Date header" if @request.headers["Date"].blank?
+
+      begin
+        request_time = Time.httpdate(@request.headers["Date"])
+        if (Time.now.utc - request_time).abs > 300
+          raise VerificationError, "Request Date is too old or too far in the future"
         end
+      rescue ArgumentError
+        raise VerificationError, "Invalid Date header format"
       end
 
       true
