@@ -10,10 +10,8 @@ module ActivityPub
           'https://w3id.org/security/v1'
         ],
         'id': activity_pub_outbox_url(@user.username),
-        'type': 'OrderedCollectionPage',
-        'totalItems': @posts.count,
-        'first': activity_pub_outbox_url(@user.username),
-        'last': activity_pub_outbox_url(@user.username),
+        'type': 'OrderedCollection',
+        'totalItems': @user.posts.count,
         'orderedItems': @posts.map { |post| create_activity_for_post(post) }
       }
     end
