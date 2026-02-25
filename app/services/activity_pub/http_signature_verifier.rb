@@ -16,6 +16,11 @@ module ActivityPub
       headers = params["headers"]&.split(" ") || ["date"]
       signature = Base64.decode64(params["signature"])
 
+      # POST requests must include digest in signed headers to prevent body tampering
+      if @request.post? && !headers.include?("digest")
+        raise VerificationError, "POST requests must include digest in signed headers"
+      end
+
       # Fetch the remote actor to get their public key
       actor_uri = key_id.sub(/#.*/, "")
       begin
