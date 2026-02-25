@@ -19,7 +19,9 @@ module ActivityPub
 
         JSON.parse(response.body.to_s)
       end
-    rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError, Errno::ECONNREFUSED => e
+    rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError,
+           Errno::ECONNREFUSED, Errno::ETIMEDOUT, Errno::EHOSTUNREACH,
+           Errno::ENETUNREACH, Errno::ECONNRESET, Errno::EPIPE => e
       raise FetchError, "Network error fetching actor #{actor_uri}: #{e.class} - #{e.message}"
     rescue JSON::ParserError => e
       raise FetchError, "Invalid JSON from actor #{actor_uri}: #{e.message}"

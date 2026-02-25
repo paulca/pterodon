@@ -11,6 +11,9 @@ module ActivityPub
       ProcessActivityJob.perform_later(activity.to_h, @user.id)
 
       head :accepted
+    rescue JSON::ParserError => e
+      Rails.logger.warn "Inbox: Invalid JSON: #{e.message}"
+      head :bad_request
     end
 
     private

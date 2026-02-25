@@ -24,7 +24,9 @@ module ActivityPub
       end
 
       response
-    rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError, Errno::ECONNREFUSED => e
+    rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError,
+           Errno::ECONNREFUSED, Errno::ETIMEDOUT, Errno::EHOSTUNREACH,
+           Errno::ENETUNREACH, Errno::ECONNRESET, Errno::EPIPE => e
       raise DeliveryError, "#{e.class} delivering to #{inbox_url}: #{e.message}"
     rescue UrlValidator::UnsafeUrlError => e
       raise DeliveryError, e.message
@@ -47,8 +49,14 @@ module ActivityPub
       end
 
       if failures.any?
-        Rails.logger.error "ActivityPub delivery failed for #{failures.size}/#{inbox_urls.size} inboxes"
+        Rails.logger.error "ActivityPub delivery failed for #{failures.size}/#{inbox_urls.size} inboxes: #{failures.join(', ')}"
       end
+
+      if failures.size == inbox_urls.size && inbox_urls.any?
+        raise DeliveryError, "All #{failures.size} deliveries failed"
+      end
+
+      failures
     end
   end
 end

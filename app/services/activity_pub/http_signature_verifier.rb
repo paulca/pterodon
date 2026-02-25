@@ -16,13 +16,27 @@ module ActivityPub
       headers = params["headers"]&.split(" ") || ["date"]
       signature = Base64.decode64(params["signature"])
 
+      # POST requests must include digest in signed headers to prevent body tampering
+      if @request.post? && !headers.include?("digest")
+        raise VerificationError, "POST requests must include digest in signed headers"
+      end
+
       # Fetch the remote actor to get their public key
       actor_uri = key_id.sub(/#.*/, "")
-      actor = RemoteActorFetcher.call(actor_uri)
+      begin
+        actor = RemoteActorFetcher.call(actor_uri)
+      rescue RemoteActorFetcher::FetchError => e
+        raise VerificationError, "Could not fetch signing key from #{actor_uri}: #{e.message}"
+      end
+
       public_key_pem = actor.dig("publicKey", "publicKeyPem")
       raise VerificationError, "No public key found for #{actor_uri}" if public_key_pem.blank?
 
-      public_key = OpenSSL::PKey::RSA.new(public_key_pem)
+      begin
+        public_key = OpenSSL::PKey::RSA.new(public_key_pem)
+      rescue OpenSSL::PKey::RSAError, OpenSSL::PKey::PKeyError => e
+        raise VerificationError, "Invalid public key from #{actor_uri}: #{e.message}"
+      end
 
       # Reconstruct the signing string
       signing_string = headers.map do |header|
@@ -54,15 +68,15 @@ module ActivityPub
       end
 
       # Validate Date header to prevent replay attacks (allow 5 minute window)
-      if @request.headers["Date"].present?
-        begin
-          request_time = Time.httpdate(@request.headers["Date"])
-          if (Time.now.utc - request_time).abs > 300
-            raise VerificationError, "Request Date is too old or too far in the future"
-          end
-        rescue ArgumentError
-          raise VerificationError, "Invalid Date header format"
+      raise VerificationError, "Missing Date header" if @request.headers["Date"].blank?
+
+      begin
+        request_time = Time.httpdate(@request.headers["Date"])
+        if (Time.now.utc - request_time).abs > 300
+          raise VerificationError, "Request Date is too old or too far in the future"
         end
+      rescue ArgumentError
+        raise VerificationError, "Invalid Date header format"
       end
 
       true
