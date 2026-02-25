@@ -44,6 +44,9 @@ module ActivityPub
       return unless in_reply_to.is_a?(String)
 
       uri = URI.parse(in_reply_to)
+      local_host = URI.parse(Rails.application.routes.url_helpers.root_url).host
+      return unless uri.host == local_host
+
       match = uri.path.match(%r{/activity_pub/([^/]+)/posts/\d+})
       User.find_by(username: match[1]) if match
     rescue URI::InvalidURIError

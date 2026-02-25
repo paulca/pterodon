@@ -111,6 +111,9 @@ module ActivityPub
 
     def find_local_post(url)
       uri = URI.parse(url)
+      local_host = URI.parse(Rails.application.routes.url_helpers.root_url).host
+      return unless uri.host == local_host
+
       match = uri.path.match(%r{/activity_pub/([^/]+)/posts/(\d+)})
       return unless match
 
