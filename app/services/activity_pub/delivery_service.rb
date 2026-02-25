@@ -24,7 +24,9 @@ module ActivityPub
       end
 
       response
-    rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError, Errno::ECONNREFUSED => e
+    rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError,
+           Errno::ECONNREFUSED, Errno::ETIMEDOUT, Errno::EHOSTUNREACH,
+           Errno::ENETUNREACH, Errno::ECONNRESET, Errno::EPIPE => e
       raise DeliveryError, "#{e.class} delivering to #{inbox_url}: #{e.message}"
     rescue UrlValidator::UnsafeUrlError => e
       raise DeliveryError, e.message
