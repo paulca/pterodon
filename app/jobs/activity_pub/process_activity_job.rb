@@ -101,12 +101,10 @@ module ActivityPub
         reply.actor_uri = @activity.actor
         reply.actor_name = actor_name
         reply.content = ActionController::Base.helpers.sanitize(note['content'])
-        reply.published_at = note['published'].present? ? Time.iso8601(note['published']) : Time.current
+        reply.published_at = parse_published_time(note['published'])
       end
 
       Rails.logger.info "Stored remote reply #{note['id']} on post #{post.id} from #{@activity.actor}"
-    rescue ArgumentError => e
-      Rails.logger.warn "ProcessActivityJob: Failed to parse published date: #{e.message}"
     end
 
     def find_local_post(url)
@@ -128,6 +126,14 @@ module ActivityPub
     rescue RemoteActorFetcher::FetchError => e
       Rails.logger.warn "ProcessActivityJob: Could not fetch actor name: #{e.message}"
       actor_uri
+    end
+
+    def parse_published_time(value)
+      return Time.current if value.blank?
+      Time.iso8601(value)
+    rescue ArgumentError
+      Rails.logger.warn "ProcessActivityJob: Failed to parse published date '#{value}'"
+      Time.current
     end
   end
 end
