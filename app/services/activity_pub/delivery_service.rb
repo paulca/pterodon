@@ -10,6 +10,8 @@ module ActivityPub
     # Delivers a signed ActivityPub payload to a remote inbox.
     # Raises DeliveryError on failure.
     def deliver(inbox_url, payload)
+      UrlValidator.validate!(inbox_url)
+
       body = payload.is_a?(String) ? payload : payload.to_json
       headers = @signer.sign(inbox_url, body: body)
 
@@ -24,6 +26,8 @@ module ActivityPub
       response
     rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError, Errno::ECONNREFUSED => e
       raise DeliveryError, "#{e.class} delivering to #{inbox_url}: #{e.message}"
+    rescue UrlValidator::UnsafeUrlError => e
+      raise DeliveryError, e.message
     end
 
     # Delivers a payload to all unique inbox URLs for a user's followers.
