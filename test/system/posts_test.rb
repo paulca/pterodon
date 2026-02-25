@@ -7,14 +7,14 @@ class PostsTest < ApplicationSystemTestCase
   end
 
   def sign_in_as(user)
-    visit new_session_url
+    visit new_session_path
     fill_in "email_address", with: user.email_address
     fill_in "password", with: "password"
     click_on "Sign in"
   end
 
   test "visiting the index" do
-    visit root_url
+    visit root_path
     assert_selector "article.post"
   end
 
@@ -29,7 +29,8 @@ class PostsTest < ApplicationSystemTestCase
 
   test "should update Post" do
     sign_in_as @user
-    visit post_url(@post)
+    visit post_path(@post)
+
     click_on "Edit"
 
     fill_in "Content", with: "Updated content"
@@ -40,11 +41,9 @@ class PostsTest < ApplicationSystemTestCase
 
   test "should destroy Post" do
     sign_in_as @user
-    visit post_url(@post)
+    visit post_path(@post)
 
-    accept_confirm "Are you sure?" do
-      click_on "Delete"
-    end
+    click_on "Delete"
 
     assert_text "Post was successfully destroyed"
   end
