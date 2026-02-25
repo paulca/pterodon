@@ -31,7 +31,23 @@ module ActivityPub
         if inner.is_a?(Hash) && inner['type'] == 'Follow'
           extract_user_from_actor_uri(inner['object'])
         end
+      when 'Create'
+        extract_user_from_create(activity)
       end
+    end
+
+    def extract_user_from_create(activity)
+      note = activity.object
+      return unless note.is_a?(Hash) && note['type'] == 'Note'
+
+      in_reply_to = note['inReplyTo']
+      return unless in_reply_to.is_a?(String)
+
+      uri = URI.parse(in_reply_to)
+      match = uri.path.match(%r{/activity_pub/([^/]+)/posts/\d+})
+      User.find_by(username: match[1]) if match
+    rescue URI::InvalidURIError
+      nil
     end
 
     def extract_user_from_actor_uri(object)

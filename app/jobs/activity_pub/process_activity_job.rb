@@ -11,6 +11,8 @@ module ActivityPub
         handle_follow
       when 'Undo'
         handle_undo
+      when 'Create'
+        handle_create
       else
         Rails.logger.info "ProcessActivityJob: Ignoring unhandled activity type '#{@activity.type}' from #{@activity.actor}"
       end
@@ -81,6 +83,48 @@ module ActivityPub
       else
         Rails.logger.warn "ProcessActivityJob: Undo from #{actor_uri} but no follower record found"
       end
+    end
+
+    def handle_create
+      note = @activity.object
+      return unless note.is_a?(Hash) && note['type'] == 'Note'
+
+      in_reply_to = note['inReplyTo']
+      return unless in_reply_to.is_a?(String)
+
+      post = find_local_post(in_reply_to)
+      return unless post
+
+      actor_name = fetch_actor_name(@activity.actor)
+
+      post.remote_replies.find_or_create_by!(activity_uri: note['id']) do |reply|
+        reply.actor_uri = @activity.actor
+        reply.actor_name = actor_name
+        reply.content = ActionController::Base.helpers.sanitize(note['content'])
+        reply.published_at = note['published'].present? ? Time.iso8601(note['published']) : Time.current
+      end
+
+      Rails.logger.info "Stored remote reply #{note['id']} on post #{post.id} from #{@activity.actor}"
+    rescue ArgumentError => e
+      Rails.logger.warn "ProcessActivityJob: Failed to parse published date: #{e.message}"
+    end
+
+    def find_local_post(url)
+      uri = URI.parse(url)
+      match = uri.path.match(%r{/activity_pub/([^/]+)/posts/(\d+)})
+      return unless match
+
+      Post.find_by(id: match[2])
+    rescue URI::InvalidURIError
+      nil
+    end
+
+    def fetch_actor_name(actor_uri)
+      actor = RemoteActorFetcher.call(actor_uri)
+      actor['name'] || actor['preferredUsername'] || actor_uri
+    rescue RemoteActorFetcher::FetchError => e
+      Rails.logger.warn "ProcessActivityJob: Could not fetch actor name: #{e.message}"
+      actor_uri
     end
   end
 end

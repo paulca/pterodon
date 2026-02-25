@@ -33,6 +33,41 @@
   }
 }
 
+.replies {
+  margin-top: 1rem;
+
+  & h3 {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: var(--gray);
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+
+.reply {
+  & header {
+    padding: 0.25rem 1rem;
+    font-size: 0.9rem;
+
+    & small {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-left: 0.5rem;
+    }
+  }
+
+  & main {
+    padding: 0 1rem 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    & p {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
 /* Responsive adjustments for smaller screens */
 @media (max-width: 767px) {
   .post {

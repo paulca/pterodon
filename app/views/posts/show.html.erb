@@ -8,7 +8,7 @@
       <%= markdown @post.content %>
     </dd>
   </dl>
-  
+
 
   <% if authenticated? && @post.user == Current.user %>
     <div>
@@ -19,3 +19,21 @@
     </div>
   <% end %>
 </article>
+
+<% replies = @post.remote_replies.order(published_at: :asc) %>
+<% if replies.any? %>
+  <section class="replies">
+    <h3>Replies (<%= replies.size %>)</h3>
+    <% replies.each do |reply| %>
+      <article class="reply">
+        <header>
+          <strong><%= reply.actor_name || reply.actor_uri %></strong>
+          <small><%= reply.published_at&.to_formatted_s(:clean) %></small>
+        </header>
+        <main>
+          <%= sanitize reply.content %>
+        </main>
+      </article>
+    <% end %>
+  </section>
+<% end %>

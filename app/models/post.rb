@@ -1,5 +1,6 @@
 class Post < ApplicationRecord
   belongs_to :user
+  has_many :remote_replies, dependent: :destroy
 
   after_create_commit :deliver_to_followers
   after_destroy_commit :deliver_delete_to_followers

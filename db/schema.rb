@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_30_204139) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_25_131728) do
   create_table "followings", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "following_id", null: false
@@ -41,6 +41,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_30_204139) do
     t.index ["user_id"], name: "index_remote_followers_on_user_id"
   end
 
+  create_table "remote_replies", force: :cascade do |t|
+    t.integer "post_id", null: false
+    t.string "activity_uri", null: false
+    t.string "actor_uri", null: false
+    t.string "actor_name"
+    t.text "content", null: false
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_uri"], name: "index_remote_replies_on_activity_uri", unique: true
+    t.index ["post_id"], name: "index_remote_replies_on_post_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -67,5 +80,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_30_204139) do
   add_foreign_key "followings", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "remote_followers", "users"
+  add_foreign_key "remote_replies", "posts"
   add_foreign_key "sessions", "users"
 end

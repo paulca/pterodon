@@ -1,7 +1,12 @@
 <article class="post">
   <header>
     <span>@<%= post.user.username %></span>
-    <small><%= link_to post.created_at.to_formatted_s(:clean), post %></small>
+    <small>
+      <%= link_to post.created_at.to_formatted_s(:clean), post %>
+      <% if post.remote_replies.any? %>
+        &middot; <%= link_to pluralize(post.remote_replies.size, "reply"), post %>
+      <% end %>
+    </small>
   </header>
   <main>
     <%= markdown post.content %>
