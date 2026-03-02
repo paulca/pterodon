@@ -126,7 +126,7 @@ module Bluesky
       match = at_uri.match(%r{\Aat://([^/]+)/([^/]+)/([^/]+)\z})
       raise Error, "Invalid AT URI: #{at_uri}" unless match
 
-      [match[1], match[2], match[3]]
+      [ match[1], match[2], match[3] ]
     end
   end
 end
