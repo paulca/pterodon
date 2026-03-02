@@ -8,6 +8,7 @@ module Bluesky
       return unless post
 
       return unless post.user.bluesky_configured?
+      return if post.bsky_uri.present?
 
       PostDeliveryService.new(post.user).deliver(post)
     rescue PostDeliveryService::DeliveryError => e
