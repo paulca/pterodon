@@ -28,6 +28,7 @@
         <div>
           <%= link_to "Home", root_path %>
           <%- if Current.user.present? -%>
+            <%= link_to "Profile", profile_path %>
             <p><strong><%= Current.user.remote_followers.count %></strong> <%= Current.user.remote_followers.count == 1 ? "follower" : "followers" %></p>
           <% end %>
         </div>

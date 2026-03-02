@@ -5,5 +5,13 @@
   <%= f.label :email_address %>
   <%= f.text_field :email_address %>
 
-  <%= f.submit "Save  " %>
+  <h3>Bluesky</h3>
+
+  <%= f.label :bsky_handle, "Bluesky Handle" %>
+  <%= f.text_field :bsky_handle, placeholder: "yourname.bsky.social" %>
+
+  <%= f.label :bsky_app_password, "App Password" %>
+  <%= f.password_field :bsky_app_password, placeholder: @user.bluesky_configured? ? "••••••••" : "Generate at bsky.app/settings/app-passwords" %>
+
+  <%= f.submit "Save" %>
 <% end %>

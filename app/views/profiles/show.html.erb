@@ -4,6 +4,15 @@
 
   <dt>Email</dt>
   <dd><%= @user.email_address %></dd>
+
+  <dt>Bluesky</dt>
+  <dd>
+    <% if @user.bluesky_configured? %>
+      Connected as <%= @user.bsky_handle %>
+    <% else %>
+      Not connected
+    <% end %>
+  </dd>
 </dl>
 
 <%= link_to "Edit profile", edit_profile_path %>
