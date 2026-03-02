@@ -9,3 +9,10 @@ two:
   email_address: two@example.com
   password_digest: <%= password_digest %>
   username: usertwo
+
+bsky_user:
+  email_address: bsky@example.com
+  password_digest: <%= password_digest %>
+  username: bskyuser
+  bsky_handle: bskyuser.bsky.social
+  bsky_app_password: test-app-password-1234

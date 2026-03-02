@@ -5,6 +5,11 @@ class User < ApplicationRecord
   has_many :remote_followers, dependent: :destroy
 
   encrypts :private_key
+  encrypts :bsky_app_password
+
+  def bluesky_configured?
+    bsky_handle.present? && bsky_app_password.present?
+  end
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
