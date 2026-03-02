@@ -4,10 +4,11 @@
     font-weight: bold;
 
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
+    gap: 0.5rem;
 
     & small {
+      margin-left: auto;
       font-size: 0.75rem;
       font-weight: normal;
 

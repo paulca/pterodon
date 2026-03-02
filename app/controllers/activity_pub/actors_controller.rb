@@ -3,7 +3,7 @@ module ActivityPub
     def show
       @user = User.find_by!(username: params[:username])
 
-      render json: {
+      actor = {
         '@context': [
           "https://www.w3.org/ns/activitystreams",
           "https://w3id.org/security/v1"
@@ -11,7 +11,7 @@ module ActivityPub
         'id': activity_pub_actor_url(@user.username),
         'type': "Person",
         'preferredUsername': @user.username,
-        'name': @user.username,
+        'name': @user.display_name_or_username,
         'inbox': activity_pub_inbox_url(@user.username),
         'outbox': activity_pub_outbox_url(@user.username),
         'followers': activity_pub_followers_url(@user.username),
@@ -26,6 +26,16 @@ module ActivityPub
           'sharedInbox': activity_pub_shared_inbox_url
         }
       }
+
+      if @user.avatar.attached?
+        actor[:icon] = {
+          'type': "Image",
+          'mediaType': @user.avatar.content_type,
+          'url': url_for(@user.avatar)
+        }
+      end
+
+      render json: actor
     end
   end
 end

@@ -3,9 +3,14 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :posts
   has_many :remote_followers, dependent: :destroy
+  has_one_attached :avatar
 
   encrypts :private_key
   encrypts :bsky_app_password
+
+  def display_name_or_username
+    display_name.presence || username
+  end
 
   def bluesky_configured?
     bsky_handle.present? && bsky_app_password.present?

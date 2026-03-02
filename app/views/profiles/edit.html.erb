@@ -1,9 +1,23 @@
 <%= form_with model: @user, url: profile_path do |f| %>
+  <%= f.label :display_name, "Display Name" %>
+  <%= f.text_field :display_name, placeholder: "How you want to be known" %>
+
   <%= f.label :username %>
   <%= f.text_field :username %>
 
   <%= f.label :email_address %>
   <%= f.text_field :email_address %>
+
+  <h3>Avatar</h3>
+
+  <% if @user.avatar.attached? %>
+    <div>
+      <%= image_tag @user.avatar, class: "avatar-preview", width: 200, height: 200 %>
+    </div>
+  <% end %>
+
+  <%= f.label :avatar %>
+  <%= f.file_field :avatar, accept: "image/*" %>
 
   <h3>Bluesky</h3>
 
