@@ -16,7 +16,7 @@ class ProfilesController < ApplicationController
   end
 
   def user_params
-    permitted = params.require(:user).permit(:username, :email, :bsky_handle, :bsky_app_password)
+    permitted = params.require(:user).permit(:username, :email, :display_name, :avatar, :bsky_handle, :bsky_app_password)
     permitted.delete(:bsky_app_password) if permitted[:bsky_app_password].blank?
     permitted
   end

@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Pterodon" %></title>
+    <title><%= content_for(:title) || site_name %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
+    <meta property="og:site_name" content="<%= site_name %>">
+    <% if default_og_image_url %>
+      <meta property="og:image" content="<%= default_og_image_url %>">
+    <% end %>
 
     <%= yield :head %>
 

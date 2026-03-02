@@ -1,7 +1,20 @@
+<% content_for :title, @user.display_name_or_username %>
+
+<% content_for :head do %>
+  <meta property="og:title" content="<%= @user.display_name_or_username %>">
+  <meta property="og:description" content="Posts by <%= @user.display_name_or_username %>">
+  <% if @user.avatar.attached? %>
+    <meta property="og:image" content="<%= url_for(@user.avatar) %>">
+  <% end %>
+<% end %>
+
 <section aria-labelledby="profile" class="profile">
+  <% if @user.avatar.attached? %>
+    <%= image_tag @user.avatar, class: "avatar", width: 200, height: 200 %>
+  <% end %>
   <dl>
     <dt>Username</dt>
-    <dd><%= @user.username %></dd>
+    <dd><%= @user.display_name_or_username %></dd>
   </dl>
 </section>
 

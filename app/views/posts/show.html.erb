@@ -1,5 +1,22 @@
+<% content_for :title, "Post by #{@post.user.display_name_or_username}" %>
+
+<% content_for :head do %>
+  <meta property="og:title" content="Post by <%= @post.user.display_name_or_username %>">
+  <meta property="og:description" content="<%= truncate(strip_tags(@post.content), length: 200) %>">
+  <meta property="og:url" content="<%= post_url(@post) %>">
+  <meta property="og:type" content="article">
+  <% if @post.user.avatar.attached? %>
+    <meta property="og:image" content="<%= url_for(@post.user.avatar) %>">
+  <% end %>
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:description" content="<%= truncate(strip_tags(@post.content), length: 200) %>">
+<% end %>
+
 <article class="post">
   <header>
+    <% if @post.user.avatar.attached? %>
+      <%= image_tag @post.user.avatar, class: "avatar-small", width: 50, height: 50, style: "border-radius: 50%; object-fit: cover" %>
+    <% end %>
     <span>@<%= @post.user.username %></span>
     <small><%= @post.created_at.to_formatted_s(:clean) %></small>
   </header>

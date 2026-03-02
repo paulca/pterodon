@@ -1,5 +1,8 @@
 <article class="post">
   <header>
+    <% if post.user.avatar.attached? %>
+      <%= image_tag post.user.avatar, class: "avatar-small", width: 50, height: 50, style: "border-radius: 50%; object-fit: cover" %>
+    <% end %>
     <span>@<%= post.user.username %></span>
     <small>
       <%= link_to post.created_at.to_formatted_s(:clean), post %>

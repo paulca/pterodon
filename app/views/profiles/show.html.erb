@@ -1,4 +1,13 @@
+<% if @user.avatar.attached? %>
+  <div>
+    <%= image_tag @user.avatar, class: "avatar", width: 200, height: 200 %>
+  </div>
+<% end %>
+
 <dl>
+  <dt>Display Name</dt>
+  <dd><%= @user.display_name_or_username %></dd>
+
   <dt>Username</dt>
   <dd><%= @user.username %></dd>
 
