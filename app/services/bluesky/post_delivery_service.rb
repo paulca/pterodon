@@ -7,9 +7,12 @@ module Bluesky
       @client = Client.new(handle: user.bsky_handle, app_password: user.bsky_app_password)
     end
 
+    MAX_GRAPHEMES = 300
+
     def deliver(post)
       @client.authenticate!
-      bsky_uri = @client.create_post(post.content, created_at: post.created_at)
+      text = truncate_graphemes(post.content)
+      bsky_uri = @client.create_post(text, created_at: post.created_at)
       post.update_column(:bsky_uri, bsky_uri)
     rescue Client::Error => e
       raise DeliveryError, "Bluesky delivery failed for post #{post.id}: #{e.message}"
@@ -28,6 +31,15 @@ module Bluesky
            Errno::ECONNREFUSED, Errno::ETIMEDOUT, Errno::EHOSTUNREACH,
            Errno::ENETUNREACH, Errno::ECONNRESET, Errno::EPIPE => e
       raise DeliveryError, "#{e.class} deleting from Bluesky: #{e.message}"
+    end
+
+    private
+
+    def truncate_graphemes(text)
+      graphemes = text.grapheme_clusters
+      return text if graphemes.length <= MAX_GRAPHEMES
+
+      graphemes.first(MAX_GRAPHEMES - 1).join + "\u2026"
     end
   end
 end
