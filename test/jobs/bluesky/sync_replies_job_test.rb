@@ -8,7 +8,6 @@ module Bluesky
       fake_service = Object.new
       fake_service.define_singleton_method(:sync_all) { nil }
 
-      original_new = ReplySyncService.method(:new)
       ReplySyncService.stub(:new, ->(*args) { synced_users << args.first; fake_service }) do
         SyncRepliesJob.perform_now
       end
