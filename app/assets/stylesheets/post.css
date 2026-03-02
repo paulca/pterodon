@@ -1,4 +1,6 @@
 .post {
+  border-radius: 0.5rem;
+
   & header {
     padding: 0.75rem 1rem 0;
     font-weight: bold;
@@ -44,7 +46,7 @@
 }
 
 .post + .post {
-  margin-bottom: 2rem;
+  margin-top: 2rem;
 }
 
 .post-actions {

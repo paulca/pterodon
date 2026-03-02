@@ -52,8 +52,8 @@
 
     & form input[type="submit"],
     & button {
-      bottom: 0.5rem;
-      right: 0.5rem;
+      bottom: 1rem;
+      right: 0.75rem;
       font-size: 0.9rem;
       padding: 0.4rem 0.8rem;
     }
