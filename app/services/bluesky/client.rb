@@ -42,6 +42,9 @@ module Bluesky
         "createdAt" => created_at.iso8601
       }
 
+      facets = extract_facets(text)
+      record["facets"] = facets if facets.any?
+
       response = authenticated_http.post(
         "#{BSKY_API}/com.atproto.repo.createRecord",
         json: { repo: @did, collection: "app.bsky.feed.post", record: record }
@@ -119,6 +122,68 @@ module Bluesky
       JSON.parse(body)
     rescue JSON::ParserError => e
       raise Error, "#{context}: invalid JSON response: #{body.truncate(200)} (#{e.message})"
+    end
+
+    URL_REGEX = %r{https?://[^\s)\]>,]+}
+    MENTION_REGEX = /(^|\s)(@([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)/
+    TAG_REGEX = /(^|\s)#([a-zA-Z0-9_]+)/
+
+    def extract_facets(text)
+      facets = []
+      utf8_text = text.encode("UTF-8")
+
+      # Links
+      utf8_text.scan(URL_REGEX) do
+        url = Regexp.last_match[0]
+        byte_start = char_to_byte_offset(utf8_text, Regexp.last_match.begin(0))
+        byte_end = byte_start + url.encode("UTF-8").bytesize
+        facets << {
+          "index" => { "byteStart" => byte_start, "byteEnd" => byte_end },
+          "features" => [ { "$type" => "app.bsky.richtext.facet#link", "uri" => url } ]
+        }
+      end
+
+      # Mentions (@handle.domain)
+      utf8_text.scan(MENTION_REGEX) do
+        match = Regexp.last_match
+        mention = match[2] # the @handle part
+        byte_start = char_to_byte_offset(utf8_text, match.begin(2))
+        byte_end = byte_start + mention.encode("UTF-8").bytesize
+        handle = mention.delete_prefix("@")
+        facets << {
+          "index" => { "byteStart" => byte_start, "byteEnd" => byte_end },
+          "features" => [ { "$type" => "app.bsky.richtext.facet#mention", "did" => resolve_handle(handle) } ]
+        }
+      end
+
+      # Hashtags
+      utf8_text.scan(TAG_REGEX) do
+        match = Regexp.last_match
+        tag_with_hash = "##{match[2]}"
+        tag_char_start = match.begin(0) + match[1].length
+        byte_start = char_to_byte_offset(utf8_text, tag_char_start)
+        byte_end = byte_start + tag_with_hash.encode("UTF-8").bytesize
+        facets << {
+          "index" => { "byteStart" => byte_start, "byteEnd" => byte_end },
+          "features" => [ { "$type" => "app.bsky.richtext.facet#tag", "tag" => match[2] } ]
+        }
+      end
+
+      facets
+    end
+
+    def char_to_byte_offset(utf8_text, char_offset)
+      utf8_text[0...char_offset].bytesize
+    end
+
+    def resolve_handle(handle)
+      response = http.get("#{BSKY_API}/com.atproto.identity.resolveHandle", params: { handle: handle })
+      return handle unless response.status.success?
+
+      data = parse_json(response.body.to_s, context: "resolve_handle")
+      data["did"] || handle
+    rescue StandardError
+      handle
     end
 
     def parse_at_uri(at_uri)
