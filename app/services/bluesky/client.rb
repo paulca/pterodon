@@ -24,6 +24,9 @@ module Bluesky
       data = parse_json(response.body.to_s, context: "authenticate!")
       @access_token = data["accessJwt"]
       @did = data["did"]
+
+      raise Error, "Authentication response missing accessJwt" if @access_token.blank?
+      raise Error, "Authentication response missing did" if @did.blank?
     rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError,
            Errno::ECONNREFUSED, Errno::ETIMEDOUT, Errno::EHOSTUNREACH,
            Errno::ENETUNREACH, Errno::ECONNRESET, Errno::EPIPE => e
@@ -49,7 +52,9 @@ module Bluesky
       end
 
       data = parse_json(response.body.to_s, context: "create_post")
-      data["uri"]
+      uri = data["uri"]
+      raise Error, "Create post response missing 'uri'" if uri.blank?
+      uri
     rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError,
            Errno::ECONNREFUSED, Errno::ETIMEDOUT, Errno::EHOSTUNREACH,
            Errno::ENETUNREACH, Errno::ECONNRESET, Errno::EPIPE => e
