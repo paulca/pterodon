@@ -5,7 +5,7 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.includes(:remote_replies).all
+    @posts = Post.includes(:remote_replies, user: { avatar_attachment: :blob }).all
   end
 
   # GET /posts/1 or /posts/1.json
@@ -63,7 +63,7 @@ class PostsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
-      @post = Post.includes(:remote_replies).find(params.expect(:id))
+      @post = Post.includes(:remote_replies, user: { avatar_attachment: :blob }).find(params.expect(:id))
     end
 
     def authorize_post_owner!

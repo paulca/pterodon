@@ -1,6 +1,6 @@
 module ApplicationHelper
   def site_owner
-    @site_owner ||= User.first
+    @site_owner ||= Rails.cache.fetch("site_owner", expires_in: 5.minutes) { User.first }
   end
 
   def site_name

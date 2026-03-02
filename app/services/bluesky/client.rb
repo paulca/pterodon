@@ -147,12 +147,15 @@ module Bluesky
       utf8_text.scan(MENTION_REGEX) do
         match = Regexp.last_match
         mention = match[2] # the @handle part
+        handle = mention.delete_prefix("@")
+        did = resolve_handle(handle)
+        next unless did&.start_with?("did:")
+
         byte_start = char_to_byte_offset(utf8_text, match.begin(2))
         byte_end = byte_start + mention.encode("UTF-8").bytesize
-        handle = mention.delete_prefix("@")
         facets << {
           "index" => { "byteStart" => byte_start, "byteEnd" => byte_end },
-          "features" => [ { "$type" => "app.bsky.richtext.facet#mention", "did" => resolve_handle(handle) } ]
+          "features" => [ { "$type" => "app.bsky.richtext.facet#mention", "did" => did } ]
         }
       end
 
@@ -178,12 +181,12 @@ module Bluesky
 
     def resolve_handle(handle)
       response = http.get("#{BSKY_API}/com.atproto.identity.resolveHandle", params: { handle: handle })
-      return handle unless response.status.success?
+      return nil unless response.status.success?
 
       data = parse_json(response.body.to_s, context: "resolve_handle")
-      data["did"] || handle
+      data["did"]
     rescue StandardError
-      handle
+      nil
     end
 
     def parse_at_uri(at_uri)
