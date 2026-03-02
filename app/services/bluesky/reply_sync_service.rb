@@ -41,7 +41,14 @@ module Bluesky
       @authenticated = true
     end
 
-    def extract_replies(replies, post)
+    MAX_DEPTH = 20
+
+    def extract_replies(replies, post, depth: 0)
+      if depth > MAX_DEPTH
+        Rails.logger.warn "Bluesky reply sync: max depth reached for post #{post.id}, truncating"
+        return
+      end
+
       replies.each do |reply_node|
         reply_post = reply_node["post"]
         next unless reply_post
@@ -54,16 +61,21 @@ module Bluesky
 
         next if uri.blank? || actor_uri.blank? || content.blank?
 
-        post.remote_replies.find_or_create_by!(activity_uri: uri) do |r|
-          r.actor_uri = actor_uri
-          r.actor_name = author
-          r.content = content
-          r.published_at = parse_time(created_at)
+        begin
+          post.remote_replies.find_or_create_by!(activity_uri: uri) do |r|
+            r.actor_uri = actor_uri
+            r.actor_name = author
+            r.content = content
+            r.published_at = parse_time(created_at)
+          end
+        rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
+          Rails.logger.error "Bluesky reply sync: failed to save reply #{uri} for post #{post.id}: #{e.message}"
+          next
         end
 
         # Recurse into nested replies
         nested = reply_node["replies"] || []
-        extract_replies(nested, post)
+        extract_replies(nested, post, depth: depth + 1)
       end
     end
 
