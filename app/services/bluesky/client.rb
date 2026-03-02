@@ -21,9 +21,13 @@ module Bluesky
         raise Error, "Authentication failed (HTTP #{response.status}): #{response.body.to_s.truncate(200)}"
       end
 
-      data = JSON.parse(response.body.to_s)
+      data = parse_json(response.body.to_s, context: "authenticate!")
       @access_token = data["accessJwt"]
       @did = data["did"]
+    rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError,
+           Errno::ECONNREFUSED, Errno::ETIMEDOUT, Errno::EHOSTUNREACH,
+           Errno::ENETUNREACH, Errno::ECONNRESET, Errno::EPIPE => e
+      raise Error, "#{e.class} during authenticate!: #{e.message}"
     end
 
     def create_post(text, created_at: Time.current)
@@ -44,8 +48,12 @@ module Bluesky
         raise Error, "Create post failed (HTTP #{response.status}): #{response.body.to_s.truncate(200)}"
       end
 
-      data = JSON.parse(response.body.to_s)
+      data = parse_json(response.body.to_s, context: "create_post")
       data["uri"]
+    rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError,
+           Errno::ECONNREFUSED, Errno::ETIMEDOUT, Errno::EHOSTUNREACH,
+           Errno::ENETUNREACH, Errno::ECONNRESET, Errno::EPIPE => e
+      raise Error, "#{e.class} during create_post: #{e.message}"
     end
 
     def delete_post(at_uri)
@@ -63,6 +71,10 @@ module Bluesky
       end
 
       true
+    rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError,
+           Errno::ECONNREFUSED, Errno::ETIMEDOUT, Errno::EHOSTUNREACH,
+           Errno::ENETUNREACH, Errno::ECONNRESET, Errno::EPIPE => e
+      raise Error, "#{e.class} during delete_post: #{e.message}"
     end
 
     def get_post_thread(at_uri)
@@ -77,7 +89,11 @@ module Bluesky
         raise Error, "Get thread failed (HTTP #{response.status}): #{response.body.to_s.truncate(200)}"
       end
 
-      JSON.parse(response.body.to_s)
+      parse_json(response.body.to_s, context: "get_post_thread")
+    rescue HTTP::Error, SocketError, OpenSSL::SSL::SSLError,
+           Errno::ECONNREFUSED, Errno::ETIMEDOUT, Errno::EHOSTUNREACH,
+           Errno::ENETUNREACH, Errno::ECONNRESET, Errno::EPIPE => e
+      raise Error, "#{e.class} during get_post_thread: #{e.message}"
     end
 
     private
@@ -92,6 +108,12 @@ module Bluesky
 
     def ensure_authenticated!
       raise Error, "Not authenticated. Call authenticate! first." unless @access_token
+    end
+
+    def parse_json(body, context:)
+      JSON.parse(body)
+    rescue JSON::ParserError => e
+      raise Error, "#{context}: invalid JSON response: #{body.truncate(200)} (#{e.message})"
     end
 
     def parse_at_uri(at_uri)
