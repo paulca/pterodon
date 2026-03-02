@@ -17,6 +17,7 @@ class User < ApplicationRecord
   end
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
+  normalizes :bsky_handle, with: ->(h) { h.strip.delete_prefix("@") }
 
   before_create :generate_activitypub_keys
 
