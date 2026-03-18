@@ -66,8 +66,14 @@ module ActivityPub
         routes.activity_pub_followers_url(@post.user.username)
       end
 
+      URL_REGEX = %r{https?://[^\s)\]>,]+}
+
       def content_html
-        "<p>#{ERB::Util.html_escape(@post.content)}</p>"
+        escaped = ERB::Util.html_escape(@post.content)
+        linked = escaped.gsub(URL_REGEX) do |url|
+          %(<a href="#{url}" rel="nofollow noopener noreferrer" target="_blank">#{url}</a>)
+        end
+        "<p>#{linked}</p>"
       end
     end
   end

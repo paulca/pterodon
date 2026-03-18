@@ -11,7 +11,7 @@ module Bluesky
 
     def deliver(post)
       @client.authenticate!
-      text = truncate_graphemes(post.content)
+      text = truncate_graphemes(post.content, post)
       bsky_uri = @client.create_post(text, created_at: post.created_at)
       post.update_column(:bsky_uri, bsky_uri)
     rescue Client::Error => e
@@ -35,11 +35,18 @@ module Bluesky
 
     private
 
-    def truncate_graphemes(text)
+    def post_url(post)
+      Rails.application.routes.url_helpers.post_url(post)
+    end
+
+    def truncate_graphemes(text, post)
       graphemes = text.grapheme_clusters
       return text if graphemes.length <= MAX_GRAPHEMES
 
-      graphemes.first(MAX_GRAPHEMES - 1).join + "\u2026"
+      url = post_url(post)
+      suffix = "\u2026 #{url}"
+      suffix_length = suffix.grapheme_clusters.length
+      graphemes.first(MAX_GRAPHEMES - suffix_length).join + suffix
     end
   end
 end
