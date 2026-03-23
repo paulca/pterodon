@@ -65,4 +65,4 @@ end
 
 gem "redcarpet", "~> 3.6"
 gem "pagy", "~> 43.0"
-gem "http", "~> 5.2"
+gem "http", "~> 6.0"
