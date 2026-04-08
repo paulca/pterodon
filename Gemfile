@@ -64,5 +64,5 @@ group :test do
 end
 
 gem "redcarpet", "~> 3.6"
-gem "pagy", "~> 43.0"
+gem "pagy", "~> 43.5"
 gem "http", "~> 5.2"
